@@ -5,8 +5,13 @@ Created by Bill Soistmann on 2014-02-27.
 
 Requires boto and a properly formated boto.cfg file.
 
-Import Examples ( using import folder2s3 )
-------------------------------------------
+Import Examples
+---------------
+
+    import folder2s3
+
+then ...
+
     folder2s3.upload(mystuff)
     folder2s3.upload(path/to/mystuff)
     folder2s3.upload(/absolute/path/to/mystuff)
@@ -20,15 +25,14 @@ Uploads folder to a bucket named abucket in profile aprofile.
 
 Command Line Examples
 ---------------------
-    folder2s3.upload(mystuff)
     ./folder2s3.py mystuff
     ./folder2s3.py path/to/mystuff
     ./folder2s3.py /absolute/path/to/mystuff
 
 All of the above will find the folder in question ( if it exists ) and upload it to a bucket named mystuff in your default profile.
 
-    ./folder2s3.py /absolute/path/to/mystuff --profile=aprofile --bucket=abucket
-    ./folder2s3.py /absolute/path/to/mystuff --paprofile --babucket
+    ./folder2s3.py --profile=aprofile --bucket=abucket /absolute/path/to/mystuff 
+    ./folder2s3.py --paprofile --babucket /absolute/path/to/mystuff
 
 Uploads folder to a bucket named abucket in profile aprofile.
 

@@ -30,7 +30,6 @@ Import Examples: ( using import folder2s3 )
 
 Command Line Example
 
-    folder2s3.upload(mystuff)
     ./folder2s3.py mystuff
     ./folder2s3.py path/to/mystuff
     ./folder2s3.py /absolute/path/to/mystuff
@@ -38,8 +37,8 @@ Command Line Example
     All of the above will find the folder in question ( if it exists ) and upload it
     to a bucket named mystuff in your default profile.
 
-    ./folder2s3.py /absolute/path/to/mystuff --profile=aprofile --bucket=abucket
-    ./folder2s3.py /absolute/path/to/mystuff --paprofile --babucket
+    ./folder2s3.py --profile=aprofile --bucket=abucket /absolute/path/to/mystuff
+    ./folder2s3.py --paprofile --babucket /absolute/path/to/mystuff
 
     Uploads folder to a bucket named abucket in profile aprofile.
 
