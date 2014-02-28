@@ -18,7 +18,7 @@ Import Examples: ( using import folder2s3 )
 
     folder2s3.upload(/absolute/path/to/mystuff, profile="aprofile", bucket="abucket")
 
-    Uploads folder to a bucket named abucket in profile aprofile.
+    Uploads folder mystuff to a bucket named abucket in profile aprofile.
 
     Local files with a modified time more recent than the S3 files will be uploaded
     to replace S3 files. Use replaceAll=True to copy regardless of mtime.

@@ -20,7 +20,7 @@ All of the above will find the folder in question ( if it exists ) and upload it
 
     folder2s3.upload(/absolute/path/to/mystuff, profile="aprofile", bucket="abucket")
 
-Uploads folder to a bucket named abucket in profile aprofile.
+Uploads folder mystuff to a bucket named abucket in profile aprofile.
 
 
 Command Line Examples
@@ -49,14 +49,13 @@ documentation for more infromation.
 
 Example /etc/boto.cfg
 ----------------------
-[aprofile]
-aws_access_key_id = ACCESS_KEY
-aws_secret_access_key = SECRET_KEY
+    [aprofile]
+    aws_access_key_id = ACCESS_KEY
+    aws_secret_access_key = SECRET_KEY
 
-
-[Credentials]
-aws_access_key_id = ACCESS_KEY
-aws_secret_access_key = SECRET_KEY
+    [Credentials]
+    aws_access_key_id = ACCESS_KEY
+    aws_secret_access_key = SECRET_KEY
 
 
 
