@@ -61,7 +61,6 @@ from boto.s3.key import Key
 
 DEBUG = None
 
-replaceAll = False
 
 def getConn(section='Credentials'):
     boto_config = boto.Config()
@@ -92,13 +91,14 @@ def upload(folder, profile=None, bucket=None, default_content_type=None, replace
 def main(argv=None):
     global DEBUG
     if argv is None:
-        argv = sys.argv
+        argv = sys.argv[1:]
     try:
         try:
-            opts, args = getopt.getopt(argv[1:], "hp:b:c:r", ["help", "profile=", "bucket=", "default_content_type=", "replaceAll"])
+            opts, args = getopt.getopt(argv, "hp:b:c:r", ["help", "profile=", "bucket=", "default_content_type=", "replaceAll"])
         except getopt.error, msg:
              raise Usage(msg)
         profile, bucket, content_type = None, None, None
+        replaceAll = False
         for option, value in opts:
             if option in ("-h", "--help"):
                 print __doc__
@@ -115,13 +115,18 @@ def main(argv=None):
             folder_name = args[0]
         except:
             raise Usage("Missing argument - folder to copy is required")
+        os.chdir(folder_name)
         bucket_name = bucket or os.path.basename(folder_name)
         profile_name = profile or "Credentials"
         default_content_type = content_type or "text/html"
         bucket = getBucket(bucket_name, profile_name)
-        s3files= bucket.list()
+        s3files = bucket.list()
         common_prefix = os.path.commonprefix([folder_name])
-        localfileset = [os.path.relpath(os.path.join(dp, f),common_prefix) for dp, dn, filenames in os.walk(common_prefix) for f in filenames]
+        localfiles = [os.path.relpath(os.path.join(dp, f),common_prefix) for dp, dn, filenames in os.walk(common_prefix) for f in filenames]
+        files2upload = {
+        'replacing': [],
+        'uploading': set(localfiles) - set([s.key for s in s3files])
+        }
         for s3file in s3files:
             keyname = s3file.key
             filename = os.path.join(common_prefix,keyname)
@@ -132,15 +137,19 @@ def main(argv=None):
                 print "local file", filename, "not found"
                 continue
             localmod = datetime.datetime.utcfromtimestamp(localmtime)
-            if replaceAll or localmod > s3mod:
-                replacename = os.path.join(bucket_name,keyname)
-                print "replacing", replacename
-                s3file.set_contents_from_filename(filename)
-                s3file.set_acl("public-read")
+            if localmod > s3mod:
+                files2upload['replacing'].append(s3file.key)
+        for replace_upload, these_files in files2upload.items():
+            for this_file in these_files:
+                print replace_upload, os.path.join(bucket_name,this_file)
+                key = Key(bucket)
+                key.key = this_file
+                key.set_contents_from_filename(os.path.join(common_prefix,this_file))
+                key.set_acl("public-read")
                 try:
-                    ext = s3file.name.split('/')[1].split('.')[1]
+                    ext = this_file.split('/')[1].split('.')[1]
                 except:
-                    s3file.copy(bucket, s3file.name, preserve_acl=True, metadata={'Content-Type': default_content_type})
+                    key.copy(bucket, key.key, preserve_acl=True, metadata={'Content-Type': default_content_type})
     except Usage, err:
         print >>sys.stderr, err.msg
         print >>sys.stderr, "for help use --help"
