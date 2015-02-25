@@ -18,7 +18,7 @@ then ...
 
 All of the above will find the folder in question ( if it exists ) and upload it to a bucket named mystuff in your default profile.
 
-    folder2s3.upload(/absolute/path/to/mystuff, profile="aprofile", bucket="abucket")
+    folder2s3.upload("/absolute/path/to/mystuff", profile="aprofile", bucket="abucket")
 
 Uploads folder mystuff to a bucket named abucket in profile aprofile.
 
